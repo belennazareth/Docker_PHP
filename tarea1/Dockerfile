@@ -4,4 +4,4 @@ RUN apt-get update && apt-get upgrade -y && apt-get install apache2 libapache2-m
 COPY bookmedik /var/www/html/
 ADD script.sh /opt/
 RUN chmod +x /opt/script.sh && rm /var/www/html/index.html
-ENTRYPOINT ["/opt/script.sh"]
+CMD ["/opt/script.sh"]
