@@ -1,0 +1,44 @@
+version: '3.3'
+services:
+  bookmedik:
+    container_name: bn-bookmedik
+    image: belennazareth/bookmedik:v3
+    restart: always
+    environment:
+      bookmedik_user: admin
+      bookmedik_passwd: admin
+      host_database: bn-mariadb
+      db_name: bookmedik
+    ports:
+      - 8082:80
+    depends_on:
+      - bn-mariadb
+      - php
+    volumes:
+      - phpdocs:/usr/share/nginx/html/
+  bn-mariadb:
+    container_name: bn-mariadb
+    image: mariadb:10.8.2
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: bookmedik
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
+    volumes:
+      - mariadb_data:/var/lib/mysql
+  php:
+    container_name: book-php
+    image: belennazareth/php-fpm-mysql:v1
+    restart: always
+    environment:
+      bookmedik_user: admin
+      bookmedik_passwd: admin
+      host_database: bn-mariadb
+      db_name: bookmedik
+    volumes:
+      - phpdocs:/usr/share/nginx/html/ 
+
+volumes:
+    mariadb_data:
+    phpdocs:
